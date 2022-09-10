@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromTankReducer from './tanks/tank.reducer';
 import * as fromUserReducer from './user/user.reducer';
 
-export const userState = createFeatureSelector<fromUserReducer.UserState>('UserState');
+export const userState = createFeatureSelector<fromUserReducer.UserState>('userState');
 export const tankState = createFeatureSelector<fromTankReducer.TankState>('tanks');
 
 export const selectUser = createSelector (

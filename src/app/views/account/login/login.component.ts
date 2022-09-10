@@ -6,15 +6,22 @@ import { AuthService } from 'src/app/services/auth.service';
 import { UserActionTypes } from 'src/app/store/user/user.actions';
 
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  form = this.fb.group({
+  signIn = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
+  });
+
+  signUp = this.fb.group({
+    name: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(7)]],
   });
 
   viewSelect: string = 'login';
@@ -30,16 +37,23 @@ export class LoginComponent implements OnInit {
 
   }
 
-  loginGoogle() {
+  createUser(){
+    const user = this.signUp.value;
+    this.store.dispatch(UserActionTypes.UserSetData({user}))
     
-    this.authService
-      .loginGoogle()
-      .then((res: any) => {
-        if (!res.uid) {return;}
-        this.store.dispatch(UserActionTypes.UserGet({id: res.uid}));
-        this.router.navigate(['/'])
-      })
-      .catch(err => console.error(err))
+  }
+
+  openGoogleLogin() {
+    this.authService.popupGoogle().then((res)=>{
+      this.getUser(res)
+    })
+  }
+
+  getUser(data: any){
+    this.authService.loginGoogleApi(data).subscribe((res)=>{
+      console.log('res api', res);
+      
+    })
 
   }
 }

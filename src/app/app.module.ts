@@ -26,8 +26,12 @@ import { appReducers } from './store/index';
 import { environment } from 'src/environments/environment';
 import { TankEffectsService } from './store/tanks/tank-effects.service';
 import { UserEffectsService } from './store/user/user-effects.service';
-import { LoginComponent } from './views/login/login.component';
+import { LoginComponent } from './views/account/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { PlatformModule } from '@angular/cdk/platform';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +40,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DashboardComponent,
     MenuComponent,
     HeaderComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +49,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule,
+    PlatformModule,
     NgxMaskModule.forRoot(),
     StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({maxAge: 25}),

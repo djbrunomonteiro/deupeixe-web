@@ -1,0 +1,119 @@
+<div class="row  m-0 p-0 d-flex justify-content-center align-items-center">
+  <div class="col-md-6  area-info">
+    <div class="row vh-100 d-flex align-items-center">
+      <div class="col p-5">
+        <h1 class="text-center">PORQUE USAR DEUPEIXE?</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et
+          eros hendrerit, imperdiet nisl ac, porttitor dolor. Sed tincidunt vitae
+          nibh a tristique. Vestibulum ante ipsum primis in faucibus orci luctus
+          et ultrices posuere cubilia curae; Nunc scelerisque leo vitae purus
+          facilisis, ac hendrerit velit varius. Sed ac tincidunt libero, at
+          faucibus tellus. Phasellus velit felis, tristique ac sapien sit amet,
+          bibendum placerat ante. Donec sagittis, est quis pretium pellentesque,
+          mauris dui volutpat lorem, ac dignissim eros ligula a ex. Suspendisse et
+          elementum velit. Cras bibendum sed tellus id porttitor. Mauris ac
+          tincidunt mi, id vehicula urna. Donec vestibulum lobortis ultricies.
+          Vestibulum sodales bibendum molestie. Aliquam viverra varius eleifend.
+          Mauris dui risus, posuere ac mattis at, sollicitudin vel leo. Etiam id
+          nisi ut metus eleifend tincidunt. Nulla rutrum ullamcorper ex, sed
+          lacinia sapien mattis hendrerit. Proin aliquam tempus felis ut dictum.
+          Sed accumsan dignissim mi nec sollicitudin.
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="col-md-6 area-login">
+      <div class="row d-flex justify-content-center align-items-center ">
+        <div class="col-9">
+          <mat-tab-group class="container-tab" mat-align-tabs="start">
+            <mat-tab label="FAZER LOGIN ">
+              <form [formGroup]="signIn">
+                <mat-form-field class="full-width pt-2" appearance="fill">
+                  <mat-label>Email</mat-label>
+                  <input formControlName="email" matInput>
+                </mat-form-field>
+  
+                <mat-form-field class="full-width" appearance="fill">
+                  <mat-label>Senha</mat-label>
+                  <input formControlName="password" type="password" matInput>
+                </mat-form-field>
+  
+                <div class="d-flex justify-content-between">
+                  <p>Lembrar Email</p>
+                  <p><a href="#">Esqueci a senha</a></p>
+                </div>
+  
+                <div class="full-width">
+                  <button (click)="openGoogleLogin()" class="btn-block btn btn-lg btn-login" type="button">
+                    <i class="bi bi-google"></i> Fazer Login
+                  </button>
+                </div>
+  
+                <div class="divider d-flex align-items-center my-4">
+                  <p class="text-center fw-bold mx-3 mb-0 text-muted">OU</p>
+                </div>
+  
+                <div class="full-width">
+                  <button (click)="openGoogleLogin()" class="btn-block btn btn-lg btn-danger " type="button">
+                    <i class="bi bi-google"></i> Entrar com o Google
+                  </button>
+                </div>
+  
+                <div class="pt-4 d-flex justify-content-between txt-warning">
+                  <p>Ao clicar "Entrar com o Google" e não for usuário do Deupeixe, 
+                    você será cadastrado e estará aceitando os Termos e Condições da Deupeixe e a Política de
+                    Privacidade</p>
+                </div>
+              </form>
+
+            </mat-tab>
+            <mat-tab label="CRIAR CONTA">
+              <form [formGroup]="signUp">
+                <mat-form-field class="full-width pt-2" appearance="fill">
+                  <mat-label>Nome</mat-label>
+                  <input formControlName="name" matInput>
+                </mat-form-field>
+  
+                <mat-form-field class="full-width pt-2" appearance="fill">
+                  <mat-label>Email</mat-label>
+                  <input formControlName="email" matInput>
+                </mat-form-field>
+  
+                <mat-form-field class="full-width" appearance="fill">
+                  <mat-label>Senha</mat-label>
+                  <input formControlName="password" type="password" matInput>
+                </mat-form-field>
+  
+                <div class="full-width">
+                  <button [disabled]="signUp.invalid" (click)="createUser()" class="btn-block btn btn-lg btn-login" type="button">
+                    <i class="bi bi-google"></i> Criar conta
+                  </button>
+                </div>
+  
+                <div class="divider d-flex align-items-center my-4">
+                  <p class="text-center fw-bold mx-3 mb-0 text-muted">OU</p>
+                </div>
+  
+                <div class="full-width">
+                  <button (click)="openGoogleLogin()" class="btn-block btn btn-lg btn-danger " type="button">
+                    <i class="bi bi-google"></i> Criar conta o Google
+                  </button>
+                </div>
+  
+                <div class="pt-4 d-flex justify-content-between txt-warning">
+                  <p>Ao clicar ""Criar conta"  ou "Criar conta o Google" estará aceitando os Termos e Condições da Deupeixe e a Política de
+                    Privacidade</p>
+                </div>
+                
+              </form>
+
+            </mat-tab>
+          </mat-tab-group>
+
+        </div>
+      </div>
+  </div>
+</div>

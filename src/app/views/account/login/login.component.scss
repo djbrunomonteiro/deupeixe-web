@@ -1,0 +1,48 @@
+.container-area{
+    background-color: var(--primary-color);
+    /* color: var(--color-white); */
+}
+.area-info{
+    background-color: var(--primary-color);
+    color: var(--primary-lighter-color)
+}
+.area-login{
+    .container-tab{
+        min-height: 90vh;
+    }
+
+    .title{
+        color: var(--primary-color);
+    }
+    a{
+        text-decoration: none;
+    }
+    .btn-login{
+
+        color: var(--primary-lighter-color) ;
+        background-color: var(--primary-color);
+    }
+    .txt-warning{
+        font-size: 12px;
+        color: rgb(134, 134, 134);
+        text-align: justify;
+    }
+    .full-width{
+        width: 100%;
+        button{
+            width: 100%;
+        }
+    }
+
+}
+
+
+
+
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}
