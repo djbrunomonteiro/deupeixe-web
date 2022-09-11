@@ -18,6 +18,7 @@ export class AuthService {
 
   authGet: any;
   isAuthenticated: boolean = false;
+    refreshToken: any;
 
   constructor(
     private afs: Firestore,
@@ -47,8 +48,10 @@ export class AuthService {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const user = result.user;
       const data = {
-        mail: user.email,
+        name: user.displayName,
+        email: user.email,
         googleToken: credential?.accessToken,
+        password: user.uid
       };
       this.checkAuthenticated();
       return data;

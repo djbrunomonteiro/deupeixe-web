@@ -22,7 +22,7 @@ import { getDatabase } from '@firebase/database';
 import { provideAuth } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth';
 
-import { appReducers } from './store/index';
+import { appReducers } from './store/app';
 import { environment } from 'src/environments/environment';
 import { TankEffectsService } from './store/tanks/tank-effects.service';
 import { UserEffectsService } from './store/user/user-effects.service';
@@ -30,7 +30,8 @@ import { LoginComponent } from './views/account/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PlatformModule } from '@angular/cdk/platform';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './interceptors/token-interceptors';
 
 
 @NgModule({
@@ -60,7 +61,13 @@ import { HttpClientModule } from '@angular/common/http';
     provideAuth(()=> getAuth()),
     EffectsModule.forRoot([TankEffectsService, UserEffectsService])
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -38,7 +38,7 @@ export class UserService {
   }
 
   getOne(id: string): Observable<any> {
-    return this.http.get(`${this.BASE_URL}/user`, {})
+    return this.http.get(`${this.BASE_URL}/user/${id}`, {})
 
     // const itemRef = doc(this.afs, `users/${id}`);
     // return docData(itemRef, { idField: 'id' })

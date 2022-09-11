@@ -45,9 +45,11 @@ export class UserEffectsService {
     switchMap((action) => {
       return this.userService.addOne(action.user).pipe(
         map((res: any) => res.results),
-        map((res: any) => {
-          console.log('result' , res);
-          this.store.dispatch(UserActionTypes.UserSetStore({user: res}))
+        map((user: any) => {
+          if(user){
+            this.store.dispatch(UserActionTypes.UserSetStore({user}))
+          }
+
         }),
         catchError((err) =>{
           console.log(err); 

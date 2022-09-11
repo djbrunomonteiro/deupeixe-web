@@ -12,7 +12,7 @@ import {
 } from '@angular/forms';
 import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppState } from 'src/app/store';
+import { AppState } from 'src/app/store/app';
 import * as fromSelectors from '../../../store/app-selectors';
 import { Tank } from 'src/app/models/tank';
 import { TankNew, TankUpdate } from 'src/app/store/tanks/tank.actions';
