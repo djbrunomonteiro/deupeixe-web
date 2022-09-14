@@ -1,3 +1,4 @@
+import { AuthEffectsService } from './store/auth/auth-effects.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -34,6 +35,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token-interceptors';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,14 +61,18 @@ import { TokenInterceptor } from './interceptors/token-interceptors';
     provideFirestore(() => getFirestore()),
     provideDatabase(()=> getDatabase()),
     provideAuth(()=> getAuth()),
-    EffectsModule.forRoot([TankEffectsService, UserEffectsService])
+    EffectsModule.forRoot([
+      TankEffectsService, 
+      UserEffectsService,
+      AuthEffectsService
+      ])
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: TokenInterceptor,
+    //   multi: true
+    // },
   ],
   bootstrap: [AppComponent]
 })

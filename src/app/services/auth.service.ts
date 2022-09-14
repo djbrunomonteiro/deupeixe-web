@@ -1,5 +1,5 @@
 import { IUser } from './../models/User';
-import { Store } from '@ngrx/store';
+import { Store, props } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
@@ -7,7 +7,7 @@ import { Auth, authState } from '@angular/fire/auth';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { UserActionTypes } from '../store/user/user.actions';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { from, map, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -20,14 +20,19 @@ export class AuthService {
   isAuthenticated: boolean = false;
     refreshToken: any;
 
+
+  private http: HttpClient;
+  
+
   constructor(
     private afs: Firestore,
     private auth: Auth,
     private router: Router,
     private store: Store,
-    private http: HttpClient
+    private handler: HttpBackend,
   ) {
     this.authGet = getAuth();
+    this.http = new HttpClient(handler);
   }
 
   logOut() {
@@ -63,6 +68,10 @@ export class AuthService {
       // ...
     })
 
+  }
+
+  loginApi(data: any): Observable<any> {
+    return this.http.post(`${this.BASE_URL}/login`, data)
   }
 
   loginGoogleApi(data: any): Observable<any> {

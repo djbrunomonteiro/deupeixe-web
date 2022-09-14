@@ -3,7 +3,7 @@ import { IUser } from "src/app/models/User";
 
 
 export const UserSetStore = createAction (
-    '[USER SET STORE] Set User in Store',
+    '[USERSETSTORE]',
     props<{user: IUser}>()
 );
 
@@ -33,11 +33,11 @@ export const UserDelete = createAction (
 )
 
 export const UserSuccess = createAction (
-    '[SUCCESS] Success User',
+    '[USERSUCCESS] Success User',
 )
 
 export const UserError = createAction (
-    '[USER ERROR] Error User'
+    '[USERERROR]'
 )
 
 export const UserActionTypes = {

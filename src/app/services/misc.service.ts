@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { of, throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ import { of, throwError } from 'rxjs';
 export class MiscService {
 
   constructor(
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar,
   ) { }
 
   converGramas(value: any){
@@ -19,6 +21,16 @@ export class MiscService {
   reloadPagina(uri: string) {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
       this.router.navigate([uri]));
+  }
+
+  notificacao(msg: string): void {
+    this.snackBar.open(msg, 'X', {
+      duration: 3000,
+      panelClass: ['snackbar'],
+      horizontalPosition: "right",
+      verticalPosition: "bottom"
+    })
+
   }
 
   formataDataBr(data: string | number | Date){

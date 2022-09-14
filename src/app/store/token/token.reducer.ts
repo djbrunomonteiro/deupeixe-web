@@ -16,9 +16,11 @@ export const TokenReducer = createReducer(
     inititalState,
 
     on(tokenSet, (state, action)=>{
+        localStorage.setItem('token_dp', JSON.stringify(action.item))
         return adapter.addOne(action.item, state);
     }),
     on(tokenUpdate, (state, action: any)=>{
+        localStorage.setItem('token_dp', JSON.stringify(action.item))
         return adapter.updateOne({id: action.id, changes: action.changes}, state);
     }),
 

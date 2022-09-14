@@ -1,66 +1,77 @@
+import { MiscService } from './../../services/misc.service';
 import { Store } from '@ngrx/store';
 import { UserService } from './../../services/user.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, switchMap, catchError, EMPTY } from 'rxjs';
+import { map, switchMap, catchError, of } from 'rxjs';
 import { UserActionTypes } from './user.actions';
-import { IUser } from 'src/app/models/User';
+import { tokenSet } from '../token/token.actions';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserEffectsService {
-
   constructor(
     private userService: UserService,
     private actions$: Actions,
-    private store: Store
-  ) { }
+    private store: Store,
+    private misc: MiscService
+  ) {}
 
   getUser = createEffect(() =>
-  this.actions$.pipe(
-    ofType(UserActionTypes.UserGet),
-    switchMap((action) => {
-      console.log(action);
-      
-      return this.userService.getOne(action.id).pipe(
-        map((res: any) => {
-          console.log(`gettt`, res);
-          this.store.dispatch(UserActionTypes.UserSetStore({user: res}))
-        }),
-        catchError((err) =>{
-          console.log(err); 
-          this.store.dispatch(UserActionTypes.UserError())           
-          return err
-        })
-      );
-    }),
-    map(() => UserActionTypes.UserSuccess())
-  )
-);
+    this.actions$.pipe(
+      ofType(UserActionTypes.UserGet),
+      switchMap((action) =>
+        this.userService.getOne(action.id).pipe(
+          map((res: any) => {
+            const data = { ...res.results, id: res.results?._id };
+            console.log('dataaa: ', data);
+            
+            this.store.dispatch(UserActionTypes.UserSetStore({ user: data }));
+            return res;
+          }),
+          catchError((err) => of({ error: true, message: err }))
+        )
+      ),
+      map((res) => {
+        if (this.misc.checkError(res)) {
+          this.misc.notificacao(res?.message);
+          return UserActionTypes.UserError();
+        } else {
+          this.misc.notificacao(res?.message);
+          return UserActionTypes.UserSuccess();
+        }
+      })
+    )
+  );
 
   setItem = createEffect(() =>
-  this.actions$.pipe(
-    ofType(UserActionTypes.UserSetData),
-    switchMap((action) => {
-      return this.userService.addOne(action.user).pipe(
-        map((res: any) => res.results),
-        map((user: any) => {
-          if(user){
-            this.store.dispatch(UserActionTypes.UserSetStore({user}))
-          }
-
-        }),
-        catchError((err) =>{
-          console.log(err); 
-          this.store.dispatch(UserActionTypes.UserError())           
-          return err
-        })
-      )
-    }),
-    map(() => UserActionTypes.UserSuccess())
-  )
-);
-
-
+    this.actions$.pipe(
+      ofType(UserActionTypes.UserSetData),
+      switchMap((action) => {
+        return this.userService.addOne(action.user).pipe(
+          map((res: any) => {
+            if (res?.results) {
+              const data = { ...res.results, id: res.results?._id };
+              this.store.dispatch(UserActionTypes.UserSetStore({ user: data }));
+            }
+            if(res?.token){
+              this.store.dispatch(tokenSet({ item: res?.token}));
+            }
+            return res;
+          }),
+          catchError((err) => of({ error: true, message: err }))
+        );
+      }),
+      map((res) => {
+        if (this.misc.checkError(res)) {
+          this.misc.notificacao(res?.message);
+          return UserActionTypes.UserError();
+        } else {
+          this.misc.notificacao(res?.message);
+          return UserActionTypes.UserSuccess();
+        }
+      })
+    )
+  );
 }

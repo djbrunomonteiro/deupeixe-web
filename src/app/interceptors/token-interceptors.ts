@@ -1,38 +1,56 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
+import {
+    HttpRequest,
+    HttpHandler,
+    HttpEvent,
+    HttpInterceptor,
+    HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject, from } from 'rxjs';
-import { catchError, map, tap, switchMap, retry, finalize, filter, take } from 'rxjs/operators';
+import {
+    catchError,
+    map,
+    tap,
+    switchMap,
+    retry,
+    finalize,
+    filter,
+    take,
+} from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
 import { Store } from '@ngrx/store';
 import { selectToken } from '../store/app-selectors';
 
-
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-
     id_user = 0;
     token = '';
     refresh_token = '';
 
     private refreshTokenInProgress = false;
-    private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+    private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
+        null
+    );
 
-    constructor(
-        private auth: AuthService,
-        private store: Store
-    ) { }
+    constructor(private auth: AuthService, private store: Store) { }
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    intercept(
+        request: HttpRequest<any>,
+        next: HttpHandler
+    ): Observable<HttpEvent<any>> {
         // PARTIAL SOURCE:
         // https://github.com/melcor76/interceptors/blob/master/src/app/interceptors/auth.interceptor.ts
-        this.store.select(selectToken).subscribe((res)=>{
+
+
+        this.store.select(selectToken).subscribe((res) => {
             this.token = res?.token;
         });
 
+
         if (!request.headers.keys().length && this.token) {
-            request = request.clone({ setHeaders: { Authorization: `Bearer ${this.token}` } });
+            request = request.clone({setHeaders: { Authorization: `Bearer ${this.token}` }});
         }
 
         return next.handle(request).pipe(
@@ -40,20 +58,22 @@ export class TokenInterceptor implements HttpInterceptor {
             catchError((err) => {
                 let newRequest;
                 if (err instanceof HttpErrorResponse && err.status === 401) {
-                    if(err.error.message === 'Token not found.'){
-                        newRequest = request.clone({ setHeaders: { Authorization: `Bearer ${this.token}` } });
+                    if (err.error.message === 'Token not found.') {
+                        newRequest = request.clone({
+                            setHeaders: { Authorization: `Bearer ${this.token}` },
+                        });
                         return next.handle(newRequest);
-                    }else{
+                    } else {
                         return throwError(() => err);
                     }
-                    
-                }else{
+                } else {
                     return throwError(() => err);
                 }
             })
-        )
+        );
 
         //  return next.handle(request)
+
         //     .pipe(retry(2),
         //         catchError(err => {
         //             let newRequest;
@@ -104,5 +124,4 @@ export class TokenInterceptor implements HttpInterceptor {
         //         })
         //     );
     }
-
 }
