@@ -25,8 +25,6 @@ export class UserEffectsService {
         this.userService.getOne(action.id).pipe(
           map((res: any) => {
             const data = { ...res.results, id: res.results?._id };
-            console.log('dataaa: ', data);
-            
             this.store.dispatch(UserActionTypes.UserSetStore({ user: data }));
             return res;
           }),
@@ -38,7 +36,6 @@ export class UserEffectsService {
           this.misc.notificacao(res?.message);
           return UserActionTypes.UserError();
         } else {
-          this.misc.notificacao(res?.message);
           return UserActionTypes.UserSuccess();
         }
       })

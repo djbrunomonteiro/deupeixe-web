@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { Auth, authState } from '@angular/fire/auth';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { UserActionTypes } from '../store/user/user.actions';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { environment } from 'src/environments/environment';
-import { HttpBackend, HttpClient } from '@angular/common/http';
-import { from, map, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, from, map, Observable, of } from 'rxjs';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root',
@@ -17,65 +17,62 @@ export class AuthService {
   BASE_URL: string = environment.apiUrl;
 
   authGet: any;
-  isAuthenticated: boolean = false;
-    refreshToken: any;
+  refreshToken: any;
 
-
-  private http: HttpClient;
-  
+  isAuthenticated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private afs: Firestore,
     private auth: Auth,
     private router: Router,
     private store: Store,
-    private handler: HttpBackend,
-  ) {
-    this.authGet = getAuth();
-    this.http = new HttpClient(handler);
+    private http: HttpClient,
+    public jwtHelper: JwtHelperService
+  ) {}
+
+  checkAuthenticated(): boolean {
+    const data = localStorage.getItem('token_dp');
+    if(data){
+      const payload = JSON.parse(data);
+      const isExpired = this.jwtHelper.isTokenExpired(payload?.token)
+      this.isAuthenticated$.next(!isExpired)
+    }
+    return this.isAuthenticated$.value;
   }
 
-  logOut() {
-    this.auth.signOut();
-    this.router.navigate(['/login']);
-  }
-
-  checkAuthenticated() {
-    authState(this.authGet).subscribe((res) =>
-      res ? (this.isAuthenticated = true) : (this.isAuthenticated = false)
-    );
-  }
-
-  async popupGoogle(){
+  async popupGoogle() {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(this.auth, provider)
-    .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const user = result.user;
-      const data = {
-        name: user.displayName,
-        email: user.email,
-        googleToken: credential?.accessToken,
-        password: user.uid
-      };
-      this.checkAuthenticated();
-      return data;
-    })
-    .catch((error) => {
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      this.checkAuthenticated();
-      return error.message;
-      // ...
-    })
-
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const user = result.user;
+        const data = {
+          name: user.displayName,
+          email: user.email,
+          googleToken: credential?.accessToken,
+          password: user.uid,
+        };
+        this.checkAuthenticated();
+        return data;
+      })
+      .catch((error) => {
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        this.checkAuthenticated();
+        return error.message;
+        // ...
+      });
   }
 
   loginApi(data: any): Observable<any> {
-    return this.http.post(`${this.BASE_URL}/login`, data)
+    return this.http.post(`${this.BASE_URL}/login`, data);
   }
 
   loginGoogleApi(data: any): Observable<any> {
-    return this.http.post(`${this.BASE_URL}/logingoogle`, data)
+    return this.http.post(`${this.BASE_URL}/logingoogle`, data);
+  }
+
+  validationToken(token: string): Observable<any> {
+    return this.http.post(`${this.BASE_URL}/validation`, token);
   }
 
   // loginGoogle(): Promise<any> {
@@ -120,4 +117,10 @@ export class AuthService {
   //       // ...
   //     });
   // }
+
+  logOut() {
+    this.isAuthenticated$.next(false);
+    localStorage.removeItem('token_dp');
+    this.router.navigate(['/login']);
+  }
 }

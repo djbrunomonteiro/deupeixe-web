@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { ItemService } from 'src/app/services/item.service';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app';
+import { AppState } from 'src/app/store/app.state';
 
 
 @Component({
@@ -20,15 +20,11 @@ export class ListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.authService.isAuthenticated);
-    
-    
-  }
 
+  }
 
   logOut() {
     console.log('logout');
-
     this.authService.logOut();
   }
 }

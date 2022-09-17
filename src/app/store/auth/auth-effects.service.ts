@@ -26,11 +26,10 @@ export class AuthEffectsService {
       switchMap((action) => {
         return this.authService.loginApi(action.data).pipe(
           map((res: any) => {
-            console.log('===', res);
-
             if (res?.token) {
               const item = res?.token;
               this.store.dispatch(tokenSet({ item }));
+              localStorage.setItem('token_dp', JSON.stringify(item))
             }
             if (res?.results) {
               const user = { ...res?.results, id: res?.results?._id };
@@ -38,7 +37,13 @@ export class AuthEffectsService {
             }
             return res;
           }),
-          catchError((err) => of({ error: true, message: err }))
+          catchError((err) => {
+            console.log(err);
+            
+
+            return of({ error: true, message: 'Usuário e/ou senha inválidos' })
+
+          } )
         );
       }),
       map((res) => {
@@ -61,11 +66,10 @@ export class AuthEffectsService {
       switchMap((action) =>
         this.authService.loginGoogleApi(action.data).pipe(
           map((res: any) => {
-            console.log('----', res);
-
             if (res?.token) {
               const item = res?.token;
               this.store.dispatch(tokenSet({ item }));
+              localStorage.setItem('token_dp', JSON.stringify(item))
             }
             if (res?.results) {
               const user = { ...res?.results, id: res?.results?._id };

@@ -26,6 +26,17 @@ export const selectToken = createSelector(
   }
 );
 
+export const selectAuthenticated = createSelector (
+  selectToken, 
+  (token) => {
+    if(token){
+      return true
+    }else{
+      return false
+    }
+  }
+)
+
 
 export const selectUser = createSelector (
   userState, 
@@ -35,17 +46,6 @@ export const selectUser = createSelector (
       return allUsers[0]
     }else{
       return null;
-    }
-  }
-)
-
-export const userIsAuthenticated = createSelector (
-  selectUser, 
-  (user) => {
-    if(user){
-      return true
-    }else{
-      return false
     }
   }
 )

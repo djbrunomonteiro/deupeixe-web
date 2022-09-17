@@ -3,7 +3,7 @@ import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit,} from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserActionTypes } from 'src/app/store/user/user.actions';
 import { skip } from 'rxjs';
@@ -35,9 +35,9 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private store: Store,
     private Actions$: Actions
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   loginApi() {
     const data = this.signIn.value;
@@ -60,25 +60,16 @@ export class LoginComponent implements OnInit {
   }
 
   loginApiGoogle(data: any) {
-    console.log('data', data);
-    
     this.loading = true;
 
-    if(data){
+    if (data) {
       this.store.dispatch(AuthActionTypes.AuthLoginGoogle({ data }));
-  
       this.Actions$.pipe(skip(1)).subscribe((res) => {
-  
-        console.log('action', res);
-        
-        if (
-          res.type === '[AUTHLOGINGOOGLE SUCCESS]' ||
-          res.type === '[AUTHLOGINGOOGLE ERROR]'
-        ) {
-          this.loading = false;
+        if (res.type === '[AUTHLOGINGOOGLE SUCCESS]') {
+          this.router.navigate(['/dashboard'])
         }
+        this.loading = false;
       });
-
     }
   }
 

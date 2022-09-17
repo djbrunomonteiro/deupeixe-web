@@ -23,7 +23,6 @@ import { getDatabase } from '@firebase/database';
 import { provideAuth } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth';
 
-import { appReducers } from './store/app';
 import { environment } from 'src/environments/environment';
 import { TankEffectsService } from './store/tanks/tank-effects.service';
 import { UserEffectsService } from './store/user/user-effects.service';
@@ -34,7 +33,13 @@ import { PlatformModule } from '@angular/cdk/platform';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token-interceptors';
 
+import { JwtModule } from '@auth0/angular-jwt';
+import { appReducers } from './store/app.state';
+import { metaReducers } from './store/logout/logout.reducer';
 
+export function tokenGetter() {
+  return localStorage.getItem('token_dp');
+}
 
 @NgModule({
   declarations: [
@@ -55,7 +60,7 @@ import { TokenInterceptor } from './interceptors/token-interceptors';
     HttpClientModule,
     PlatformModule,
     NgxMaskModule.forRoot(),
-    StoreModule.forRoot(appReducers),
+    StoreModule.forRoot(appReducers, {metaReducers}),
     StoreDevtoolsModule.instrument({maxAge: 25}),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
@@ -65,14 +70,30 @@ import { TokenInterceptor } from './interceptors/token-interceptors';
       TankEffectsService, 
       UserEffectsService,
       AuthEffectsService
-      ])
+      ]),
+      JwtModule.forRoot({
+        config: {
+          tokenGetter: tokenGetter,
+          allowedDomains: [
+            'localhost:4200',
+            'app.buykardex.com.br',
+            'api.buykardex.com.br',
+            'api-dev.buykardex.com.br',
+            '192.168.1.12:4200',
+            '192.168.15.119:8080',
+          ],
+          disallowedRoutes: [
+          ]
+        }
+      }),
+    
   ],
   providers: [
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: TokenInterceptor,
-    //   multi: true
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })
