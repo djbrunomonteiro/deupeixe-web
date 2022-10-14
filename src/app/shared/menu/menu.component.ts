@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { MENUROUTES } from './menu-items';
 
 @Component({
   selector: 'app-menu',
@@ -7,11 +8,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
 
-  navs = ['Home', 'Criar Viveiro','Meus Viveiros']
+  public getScreenWidth: any;
+  public getScreenHeight: any;
+
+  public sidebarnavItems: any = [];
+
+  isOPen = false;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.sidebarnavItems = MENUROUTES.filter(sidebarnavItem => sidebarnavItem);
+    this.getScreenWidth = window.innerWidth;
+    this.getScreenHeight = window.innerHeight;
+
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    this.getScreenWidth = window.innerWidth;
+    this.getScreenHeight = window.innerHeight;
+  }
+
+  openMenu(){
+    this.isOPen = !this.isOPen;
   }
 
 }

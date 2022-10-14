@@ -1,7 +1,48 @@
+.menu-cont{
+    position: fixed;
+    height: 100vh;
+    width: 17vw;
+    background: var(--primary-color);
+    -webkit-box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
 .select-btn{
     color: var(--text-white);
+    height: 100px;
 }
 .select-btn:hover{
     background-color: var(--accent-darker-color);
     color: var();
 }
+
+.menu-container{
+    position: relative;
+    min-height: 50vh;
+}
+
+.menu-mobile{
+    height: 50px;
+    background: var(--primary-color);
+    -webkit-box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+    .img{
+        height: 50px;
+    }
+}
+
+.menuOpen{
+    position: absolute;
+    background: var(--primary-color);
+    -webkit-box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+    width: 70%;
+    z-index: 50;
+}
+
+@media screen and (max-width: 1199px) {
+    .menu-cont{
+        width: 25vw;
+    }
+}
+

@@ -64,8 +64,7 @@ export class MiscService {
 
   checkError(res: any){
     if(res.hasOwnProperty('error')){
-      console.error(res.message);
-      return true;
+      return res?.error;
     } else{
       return false;
     }
@@ -81,9 +80,9 @@ export class MiscService {
     return true;
   }
 
-  extractData(res: Response){
+  extractData(res: Response | any){
     const body = res;
-    return body;
+    return body || {};
   }
 
   handleError(error: Response | any){

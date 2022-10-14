@@ -1,5 +1,6 @@
-export interface Tank {
-    id?: string | number,
+export interface ITank {
+    _id?: string,
+    id?: string,
     type: string,
     area: string | number,
     date_start: string | number,

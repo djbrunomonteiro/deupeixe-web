@@ -5,19 +5,40 @@ export const TanksAll = createAction (
     '[TANKSALL] Get ALl Tanks'
 );
 
-export const GetTank = createAction (
-    '[GETTANK] Get Tank ID',
-    props<{tanks: Tank}>()
-);
-
 export const SetTanksAll = createAction (
-    '[SETTANKSALL] Set ALl Tanks',
+    '[SETTANKSALL] Set store',
     props<{tanks: Tank[]}>()
 );
 
-export const TankNew = createAction (
-    '[TANKNEW] Create new Tank',
+export const SuccessGetTanks = createAction (
+    '[SUCCESS GET TANKS]',
+)
+export const ErrorGetTanks = createAction (
+    '[SUCCESS GET TANKS]',
+)
+
+export const GetTank = createAction (
+    '[GETTANK] Data base',
+    props<{tanks: Tank}>()
+);
+
+
+export const SetNewTank = createAction (
+    '[SetNewTank] Data base',
     props<{tank: Tank}>()
+)
+
+export const SetNewTankStore = createAction (
+    '[SetNewTank] Store',
+    props<{tank: Tank}>()
+)
+
+
+export const SuccessSetTank = createAction (
+    '[SuccessSetTank]',
+)
+export const ErrorSetTank = createAction (
+    '[ErrorSetTank]',
 )
 
 export const TankUpdate = createAction (
@@ -30,9 +51,7 @@ export const TankDelete = createAction (
     props<{tank: {id: string}}>()
 )
 
-export const SuccessGetTanks = createAction (
-    '[SUCCESS GET TANKS] Success Get Tanks',
-)
+
 
 export const SetIdRef = createAction (
     '[SET ID REF] Set Id Ref',
@@ -46,11 +65,16 @@ export const ErrorStatus = createAction (
 
 export const TankActionTypes = {
     TanksAll,
-    TankNew,
-    TankUpdate,
-    TankDelete,
     SetTanksAll,
     SuccessGetTanks,
+    ErrorGetTanks,
+    SetNewTank,
+    SetNewTankStore,
+    SuccessSetTank,
+    ErrorSetTank,
+    TankDelete,
+    TankUpdate,
     SetIdRef,
-    ErrorStatus
+    ErrorStatus,
+
 }

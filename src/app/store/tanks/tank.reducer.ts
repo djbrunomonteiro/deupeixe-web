@@ -4,13 +4,11 @@ import { Tank } from 'src/app/models/tank';
 import { TankActionTypes } from './tank.actions';
 
 export interface TankState extends EntityState<Tank> {
-  tankRefId: string | null;
 }
 
 export const adapter: EntityAdapter<Tank> = createEntityAdapter<Tank>();
 
 export const initialState: TankState = adapter.getInitialState({
-  tankRefId: '',
 });
 
 export const tankReducer = createReducer(
@@ -19,7 +17,7 @@ export const tankReducer = createReducer(
     return adapter.addMany(action.tanks, state);
   }),
 
-  on(TankActionTypes.TankNew, (state, action) => {
+  on(TankActionTypes.SetNewTankStore, (state, action) => {
     return adapter.addOne(action.tank, state);
   }),
   on(TankActionTypes.TankDelete, (state, action) => {

@@ -8,15 +8,15 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: 'list',
+        path: 'tanks',
         component: ListComponent,
       },
       {
-        path: 'editor',
+        path: 'tanks/edit',
         component: EditorComponent,
       },
       {
-        path: 'editor/:id',
+        path: 'tanks/edit/:id',
         component: EditorComponent,
       },
     ]

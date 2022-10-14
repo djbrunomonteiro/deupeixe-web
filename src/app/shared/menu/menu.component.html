@@ -1,10 +1,47 @@
-<div class="row d-flex justify-content-center">
-  <div class="col-7">
-    <img style="width: 100%" src="../../../assets/imgs/testelogo.png" alt="">
+
+<div class="menu-cont m-0 p-0" *ngIf="getScreenWidth >= 700; else menuMob">
+  <div class="row d-flex justify-content-center">
+    <div class="col-10">
+      <div class="d-flex justify-content-between ">
+        <img style="width: 100%" src="../../../assets/imgs/testelogo.png" alt="">
+      </div>
+    </div>
   </div>
+  <mat-selection-list #shoes [multiple]="false" >
+    <mat-list-option class="select-btn" *ngFor="let item of sidebarnavItems" [value]="item?.path" [routerLink]="item?.path"> 
+      <div class="d-flex justify-content-between align-items-center">
+        <div>{{item?.title}}</div>
+        <div><mat-icon>{{item?.icon}}</mat-icon></div>
+      </div>
+    </mat-list-option>
+  </mat-selection-list>
 </div>
-<mat-selection-list #shoes [multiple]="false">
-  <mat-list-option class="select-btn" *ngFor="let item of navs">
-    {{item}}
-  </mat-list-option>
-</mat-selection-list>
+
+<ng-template #menuMob>
+  <mat-toolbar color="primary">
+    <button (click)="openMenu()" mat-icon-button>
+      <mat-icon *ngIf="!isOPen">menu</mat-icon>
+      <mat-icon *ngIf="isOPen">close</mat-icon>
+    </button>
+    <span>DeuPeixe</span>
+  </mat-toolbar>
+</ng-template>
+
+<ng-container *ngIf="isOPen">
+  <div class="menuOpen">
+    <mat-selection-list #shoes [multiple]="false">
+      <mat-list-option class="select-btn" *ngFor="let item of sidebarnavItems" [value]="item?.path">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>{{item?.title}}</div>
+          <div><mat-icon>{{item?.icon}}</mat-icon></div>
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+
+  </div>
+
+</ng-container>
+
+
+
+

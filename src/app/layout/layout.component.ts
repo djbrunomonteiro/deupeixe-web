@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-layout',
@@ -7,9 +7,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayoutComponent implements OnInit {
 
+  public getScreenWidth: any;
+  public getScreenHeight: any;
+
+  public sidebarnavItems: any = [];
+
+  isOPen = false;
+
   constructor() { }
 
   ngOnInit(): void {
+
+    this.getScreenWidth = window.innerWidth;
+    this.getScreenHeight = window.innerHeight;
+
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    this.getScreenWidth = window.innerWidth;
+    this.getScreenHeight = window.innerHeight;
+
+  }
+
+  openMenu(){
+    this.isOPen = !this.isOPen;
   }
 
 }

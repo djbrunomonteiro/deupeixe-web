@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, from, map, Observable, of } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { logoutAction } from '../store/logout/logout.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -121,6 +122,7 @@ export class AuthService {
   logOut() {
     this.isAuthenticated$.next(false);
     localStorage.removeItem('token_dp');
+    this.store.dispatch(logoutAction());
     this.router.navigate(['/login']);
   }
 }

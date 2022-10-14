@@ -34,7 +34,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token-interceptors';
 
 import { JwtModule } from '@auth0/angular-jwt';
-import { appReducers } from './store/app.state';
+import { appReducers } from './store/app';
 import { metaReducers } from './store/logout/logout.reducer';
 
 export function tokenGetter() {

@@ -24,6 +24,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatCardModule} from '@angular/material/card';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatSidenavModule,
     MatTabsModule,
     MatStepperModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatCardModule
   ],
   exports:[
     MatSnackBarModule,
@@ -81,7 +83,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatSidenavModule,
     MatTabsModule,
     MatStepperModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatCardModule
   ]
 })
 export class MaterialsharedModule {

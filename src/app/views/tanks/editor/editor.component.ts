@@ -1,3 +1,6 @@
+import { Actions } from '@ngrx/effects';
+import { TankActionTypes } from './../../../store/tanks/tank.actions';
+import { TankService } from './../../../services/tank.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ItemService } from 'src/app/services/item.service';
 import { Store } from '@ngrx/store';
@@ -14,13 +17,12 @@ import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fromSelectors from '../../../store/app-selectors';
 import { Tank } from 'src/app/models/tank';
-import { TankNew, TankUpdate } from 'src/app/store/tanks/tank.actions';
-import { AppState } from 'src/app/store/app.state';
+import { AppState } from 'src/app/store/app';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.css'],
+  styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit, OnChanges {
 
@@ -32,8 +34,8 @@ export class EditorComponent implements OnInit, OnChanges {
   });
 
   form = this.fb.group({
-    id: [''],
-    type: ['', [Validators.required]],
+    _id: [''],
+    species: ['', [Validators.required]],
     area: ['', [Validators.required, Validators.minLength(2)]],
     date_start: ['', [Validators.required]],
     cycle: ['', [Validators.required]],
@@ -121,13 +123,13 @@ export class EditorComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private routerAtiva: ActivatedRoute,
     public misc: MiscService,
-    private router: Router,
     private store: Store<AppState>,
-    private itemService: ItemService,
-    private auth: AuthService
+    private tankService: TankService,
+    private Actions$: Actions
   ) {
     this.cycleGenerator();
     this.amountFishGenerator();
+
   }
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
@@ -137,6 +139,12 @@ export class EditorComponent implements OnInit, OnChanges {
     this.tanks$ = this.store.select(fromSelectors.selectAll);
     this.getItem();
     this.middleGenerator();
+    console.log(`req`);
+    
+    this.tankService.getAll().subscribe((res)=>{
+      console.log(res);
+      
+    })
   
   }
 
@@ -147,7 +155,7 @@ export class EditorComponent implements OnInit, OnChanges {
     this.tankRef$.subscribe((res: any) => {
       if (!res) {return;}
       this.form.patchValue({
-        id: res.id,
+        _id: res.id,
         type: res.type,
         area: res.area,
         cycle: res.cycle,
@@ -210,47 +218,10 @@ export class EditorComponent implements OnInit, OnChanges {
   }
 
   createItem(): void {
-    //update(id) e create()
-    const d = {
-      nome: 'teste',
-      idade: 3
-    }
-
-
-    return
-    if (this.form.value.id) {
-      this.form.patchValue({
-        update_at: new Date(),
-      });
-
-      this.store.dispatch(
-        TankUpdate({ id: this.form.value.id, tank: this.form.value })
-      );
-      
-
-      this.idRef$ = this.store.select(fromSelectors.selectIdRef);
-      this.idRef$.subscribe((res: any) => {
-        if (!res) {return;}
-        this.idRef = res;
-        this.getItem()
-      });
-
-    } else {
-      this.form.patchValue({
-        create_at: new Date(),
-        update_at: new Date(),
-      });
-
-      this.store.dispatch(TankNew({ tank: this.form.value }));
-
-      this.idRef$ = this.store.select(fromSelectors.selectIdRef);
-      this.idRef$.subscribe((res: any) => {
-        if (!res) {return;}
-        this.idRef = res;
-        this.router.navigate([`/tanks/editor/${this.idRef}`]);
-      });
-      
-    }
+    const data = {...this.form.value}
+    delete data?._id;
+    this.store.dispatch(TankActionTypes.SetNewTank({tank: data}))
+    
   }
 
   foodcycleSelect() {

@@ -1,5 +1,5 @@
 import { Action, ActionReducer, MetaReducer } from "@ngrx/store";
-import { AppState } from "../app.state";
+import { AppState } from "../app";
 
 export function clearState(reducer: ActionReducer<AppState>): ActionReducer<any> {
   return function(state: any, action: Action): AppState {

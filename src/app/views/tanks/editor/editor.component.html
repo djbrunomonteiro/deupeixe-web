@@ -1,351 +1,329 @@
 <div class="m-2">
-  <form [formGroup]="form" (ngSubmit)="createItem()">
-    <!-- <div class="row " hidden style="min-height: 300px;">
-      <div class="card justify-content-center shadow-lg p-3 mb-3 bg-white rounded " style="min-height: 300px;">
-        <div class="col-md-12 text-center ">
-          <button class="btn  btn-lg btn-block text-color-sec"><i style="font-size: 120px;"
-              class="bi bi-plus-square-dotted"></i></button>
-        </div>
-        <h1 class="text-center ">Adicionar Viveiro</h1>
-      </div>
-    </div> -->
-    
+  <form [formGroup]="form" >
+    <div class="row m-0 p-0">
+      <h4 class="text-center">Criar Novo Viveiro</h4>
+      <h2>Identificador 001</h2>
+    </div>
 
-    <!-- create dados -->
-    <div class="row" >
-      <div class="card round-xl justify-content-top shadow-lg p-3 mb-3 bg-white " style="min-height: 75vh;">
-        <div class="row">
-          <h1 class="text-center ">Dados do Viveiro</h1>
-          <h2>Identificador 001</h2>
-        </div>
-
-        <mat-stepper #stepper>
-          <mat-step>
-            <ng-template matStepLabel>Inicio Estocagem</ng-template>
-            <div class="col m-3">
-              <div class="row ">
+    <mat-stepper #stepper>
+      <mat-step>
+        <ng-template matStepLabel>Inicio Estocagem</ng-template>
+        <div class="col m-3">
+          <div class="row ">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Especie</mat-label>
+                <mat-select formControlName="species">
+                  <mat-option class="text-capitalize" *ngFor="let item of species" value={{item}}>
+                    {{item}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Area do Viveiro em m<sup>2</sup></mat-label>
+                <input matInput placeholder="ex: 250mt" formControlName="area" mask="separator.2"
+                  thousandSeparator=".">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Data Inicial</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="date_start"
+                  (ngModelChange)="createEndDate()">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <div class="row">
                 <div class="col">
                   <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>Especie</mat-label>
-                    <mat-select formControlName="type">
-                      <mat-option class="text-capitalize" *ngFor="let item of species" value={{item}}>
-                        {{item}}
+                    <mat-label>Ciclo de Recria/Engorda</mat-label>
+                    <mat-select formControlName="cycle" (ngModelChange)="foodcycleSelect(); createEndDate()">
+                      <mat-option *ngFor="let item of cycle" value={{item}}>
+                        {{item}} Meses
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col">
-                  <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>Area do Viveiro em m<sup>2</sup></mat-label>
-                    <input matInput placeholder="ex: 250mt" formControlName="area" mask="separator.2"
-                      thousandSeparator=".">
-                  </mat-form-field>
-                </div>
               </div>
-              <div class="row">
-                <div class="col">
-                  <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>Data Inicial</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="date_start"
-                      (ngModelChange)="createEndDate()">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                </div>
-                <div class="col">
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="col">
+                <mat-form-field class="full-width" appearance="fill">
+                  <mat-label>Qtd. de alevinos</mat-label>
+                  <mat-select formControlName="fish_start" (selectionChange)="limitFishEnd()">
+                    <mat-option *ngFor="let item of amountFish; let i = index" value={{item}}>
+                      {{item}}und ({{i+1}} Milheiro(s))
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+              </div>
+            </div>
+            <div class="col">
+              <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Peso médio</mat-label>
+                <mat-select formControlName="weight_start">
+                  <mat-option *ngFor="let item of middleWeigth; let i = index" value={{item}}>
+                    {{item}} gramas ( {{misc.converGramas(item)}}kg)
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <p class="text-end">*Nessa seção informe os dados de inicio da estocagem do viveiro.</p>
+          </div>
+
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Alimentação</ng-template>
+        <div class="col m-3">
+          <div class="row">
+            <div class="row mb-3">
+              <mat-radio-group formControlName="food_cycle" (change)="foodcycleSelect()">
+                <mat-radio-button class="select-info-food" value="month">MENSAL</mat-radio-button>
+                <mat-radio-button class="select-info-food" value="complete">CICLO COMPLETO</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="row" formGroupName="food">
+              <div class="col-md-12" *ngIf="form.value.food_cycle ==='complete'">
+                <mat-form-field class="full-width" appearance="fill">
+                  <mat-label>Racao Utilizada no Ciclo Completo</mat-label>
+                  <input matInput formControlName="complete" placeholder="1500g" mask="separator.2"
+                    thousandSeparator="." suffix="g">
+                  <mat-hint matSuffix>({{misc.converGramas(form.value.food.complete)}}kg)</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="fill">
+                  <mat-label>Investimento em Ração no Ciclo Completo</mat-label>
+                  <input matInput formControlName="priceComplete" placeholder="R$2250" mask="separator.2"
+                    thousandSeparator="." prefix="R$">
+                </mat-form-field>
+              </div>
+              <ng-container *ngIf="form.value.food_cycle ==='month'">
+                <div class="col border m-2 p-2" *ngFor="let item of cycleMonth; let i = index">
                   <div class="row">
                     <div class="col">
+                      <p>Mês {{i+1}}</p>
+                    </div>
+                    
+                  </div>
+                  <mat-form-field class="full-width" appearance="fill" formArrayName="month">
+                    <mat-label>Ração Utilizada </mat-label>
+                    <input matInput placeholder="500g" mask="separator.2" thousandSeparator="." suffix="g"
+                      [formControlName]="i" (change)="sumInputs()">
+                    <mat-hint matSuffix>({{misc.converGramas(form.value.food.month[i])}}kg)</mat-hint>
+                  </mat-form-field>
+                  <mat-form-field class="full-width" appearance="fill" formArrayName="prices">
+                    <mat-label>Investimento </mat-label>
+                    <input matInput placeholder="R$250" mask="separator.2" thousandSeparator="." prefix="R$"
+                      [formControlName]="i" (change)="sumInputs()">
+                  </mat-form-field>
+                </div>
+              </ng-container>
+            </div>
+            <div class="row">
+              <p class="text-end">*Nessa seção informe os dados sobre alimentação do viveiro.</p>
+            </div>
+          </div>
+
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Custos / Despesas</ng-template>
+        <div class="col m-3">
+          <div class="row" formGroupName="expenses">
+           
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col m-2">
+                    <h4>Fertilizantes</h4>
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>R$ Gasto Fertilizantes</mat-label>
+                      <input formControlName="fertilizers" matInput >
+                    </mat-form-field>
+                  </div>
+                  <div class="col m-2">
+                    <h4>Corretivos</h4>
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>R$ Gasto Corretivos</mat-label>
+                      <input formControlName="correctives" matInput >
+                    </mat-form-field>
+                  </div>
+                  <div class="col m-2">
+                    <h4>Análises (reagentes)</h4>
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>R$ Gasto Análises</mat-label>
+                      <input formControlName="analysis" matInput >
+                    </mat-form-field>
+                  </div>
+                  <div class="col m-2">
+                    <h4>Embalagens / Lacres</h4>
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>R$ Gasto Embalagens / lacres</mat-label>
+                      <input formControlName="pack" matInput >
+                    </mat-form-field>
+                  </div>
+                  <div class="col m-2">
+                    <h4>Mão de obra</h4>
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>R$ Gasto Mão de obra</mat-label>
+                      <input formControlName="labor" matInput >
+                    </mat-form-field>
+                  </div>
+                  <div class="col m-2">
+                    <h4>Transporte</h4>
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>R$ Gasto Transporte</mat-label>
+                      <input formControlName="transport" matInput >
+                    </mat-form-field>
+                  </div>
+                  <div class="col m-2">
+                    <h4>Assistência Técnica</h4>
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>R$ Gasto Assistência</mat-label>
+                      <input formControlName="assistance" matInput placeholder="" placeholder="ex: R$250">
+                    </mat-form-field>
+                  </div>
+                  <div class="col m-2">
+                    <h4>Taxas e Impostos</h4>
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>R$ Gasto Taxas e Impostos</mat-label>
+                      <input formControlName="taxes" matInput >
+                    </mat-form-field>
+                  </div>
+                  <div class="col m-2">
+                    <h4>Outros</h4>
+                    <mat-form-field class="full-width" appearance="fill">
+                      <mat-label>R$ Gasto Outros</mat-label>
+                      <input formControlName="others" matInput >
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </div>
+          
+          </div>
+          <div class="row">
+            <p class="text-end">*Nessa seção informe os custos e despesas com o viveiro.</p>
+          </div>
+
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Fim de Estocagem</ng-template>
+        <div class="col m-3">
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Despescagem</mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="date_end">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+                <mat-hint *ngIf="endDateSuggestion">Data Sugerida : {{endDateSuggestion}}</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field class="full-width" appearance="fill">
+                <mat-label>N.º de peixes despescados</mat-label>
+                <input mask="separator.2" thousandSeparator="." matInput placeholder="ex: 1000und"
+                  formControlName="fish_end" (change)="limitFishEnd(); enableDisableRevenueControls()">
+                <mat-hint *ngIf="controlFishEnd.errors">Quantidade maxima: {{this.form.value.fish_start}}</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Peso Medio Final </mat-label>
+                <input matInput placeholder="1500g" mask="0.000 || 00.000 " suffix="g" formControlName="weight_end">
+                <mat-hint matSuffix>({{misc.converGramas(form.value.weight_end)}}kg)</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <p class="text-end">*Nessa seção informe os dados sobre a despescagem do viveiro.</p>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Receitas / Vendas</ng-template>
+        <div class="col m-3">
+          <div class="row">
+            <div class="col-md-12">
+              <ng-container *ngFor="let item of controlRevenue.controls; let i = index">
+                <ng-container [formGroupName]="i">
+                  <div class="row mt-3">
+                    <div class="col">
                       <mat-form-field class="full-width" appearance="fill">
-                        <mat-label>Ciclo de Recria/Engorda</mat-label>
-                        <mat-select formControlName="cycle" (ngModelChange)="foodcycleSelect(); createEndDate()">
-                          <mat-option *ngFor="let item of cycle" value={{item}}>
-                            {{item}} Meses
-                          </mat-option>
+                        <mat-label>Especificação</mat-label>
+                        <mat-select formControlName="description">
+                          <mat-option value="vivos">Venda de Peixes Vivos</mat-option>
+                          <mat-option value="abatidos">Venda de Peixes abatidos</mat-option>
+                          <mat-option value="outros">Outros</mat-option>
                         </mat-select>
                       </mat-form-field>
                     </div>
                   </div>
-                </div>
 
-              </div>
-              <div class="row">
-                <div class="col">
-                  <div class="col">
-                    <mat-form-field class="full-width" appearance="fill">
-                      <mat-label>Qtd. de alevinos</mat-label>
-                      <mat-select formControlName="fish_start" (selectionChange)="limitFishEnd()">
-                        <mat-option *ngFor="let item of amountFish; let i = index" value={{item}}>
-                          {{item}}und ({{i+1}} Milheiro(s))
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field class="full-width" appearance="fill">
+                        <mat-label>Qtd. de Peixes</mat-label>
+                        <input formControlName="qtd" matInput placeholder="ex: 900 und" (change)="limitQtd(i)"
+                          mask="separator.2" thousandSeparator=".">
+                        <mat-hint>*Quantidade max: {{limitQtd(i)}}</mat-hint>
 
-                  </div>
-                </div>
-                <div class="col">
-                  <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>Peso médio</mat-label>
-                    <mat-select formControlName="weight_start">
-                      <mat-option *ngFor="let item of middleWeigth; let i = index" value={{item}}>
-                        {{item}} gramas ( {{misc.converGramas(item)}}kg)
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <p class="text-end">*Nessa seção informe os dados de inicio da estocagem do viveiro.</p>
-              </div>
-
-            </div>
-          </mat-step>
-          <mat-step>
-            <ng-template matStepLabel>Alimentação</ng-template>
-            <div class="col m-3">
-              <div class="row">
-                <div class="row mb-3">
-                  <mat-radio-group formControlName="food_cycle" (change)="foodcycleSelect()">
-                    <mat-radio-button class="select-info-food" value="month">MENSAL</mat-radio-button>
-                    <mat-radio-button class="select-info-food" value="complete">CICLO COMPLETO</mat-radio-button>
-                  </mat-radio-group>
-                </div>
-                <div class="row" formGroupName="food">
-                  <div class="col-md-12" *ngIf="form.value.food_cycle ==='complete'">
-                    <mat-form-field class="full-width" appearance="fill">
-                      <mat-label>Racao Utilizada no Ciclo Completo</mat-label>
-                      <input matInput formControlName="complete" placeholder="1500g" mask="separator.2"
-                        thousandSeparator="." suffix="g">
-                      <mat-hint matSuffix>({{misc.converGramas(form.value.food.complete)}}kg)</mat-hint>
-                    </mat-form-field>
-                    <mat-form-field class="full-width" appearance="fill">
-                      <mat-label>Investimento em Ração no Ciclo Completo</mat-label>
-                      <input matInput formControlName="priceComplete" placeholder="R$2250" mask="separator.2"
-                        thousandSeparator="." prefix="R$">
-                    </mat-form-field>
-                  </div>
-                  <ng-container *ngIf="form.value.food_cycle ==='month'">
-                    <div class="col border m-2 p-2" *ngFor="let item of cycleMonth; let i = index">
-                      <div class="row">
-                        <div class="col">
-                          <p>Mês {{i+1}}</p>
-                        </div>
-                        
-                      </div>
-                      <mat-form-field class="full-width" appearance="fill" formArrayName="month">
-                        <mat-label>Ração Utilizada </mat-label>
-                        <input matInput placeholder="500g" mask="separator.2" thousandSeparator="." suffix="g"
-                          [formControlName]="i" (change)="sumInputs()">
-                        <mat-hint matSuffix>({{misc.converGramas(form.value.food.month[i])}}kg)</mat-hint>
-                      </mat-form-field>
-                      <mat-form-field class="full-width" appearance="fill" formArrayName="prices">
-                        <mat-label>Investimento </mat-label>
-                        <input matInput placeholder="R$250" mask="separator.2" thousandSeparator="." prefix="R$"
-                          [formControlName]="i" (change)="sumInputs()">
                       </mat-form-field>
                     </div>
-                  </ng-container>
-                </div>
-                <div class="row">
-                  <p class="text-end">*Nessa seção informe os dados sobre alimentação do viveiro.</p>
-                </div>
-              </div>
-
-            </div>
-          </mat-step>
-
-          <mat-step>
-            <ng-template matStepLabel>Custos / Despesas</ng-template>
-            <div class="col m-3">
-              <div class="row" formGroupName="expenses">
-               
-                  <div class="col-md-12">
-                    <div class="row">
-                      <div class="col m-2">
-                        <h4>Fertilizantes</h4>
-                        <mat-form-field class="full-width" appearance="fill">
-                          <mat-label>R$ Gasto Fertilizantes</mat-label>
-                          <input formControlName="fertilizers" matInput >
-                        </mat-form-field>
-                      </div>
-                      <div class="col m-2">
-                        <h4>Corretivos</h4>
-                        <mat-form-field class="full-width" appearance="fill">
-                          <mat-label>R$ Gasto Corretivos</mat-label>
-                          <input formControlName="correctives" matInput >
-                        </mat-form-field>
-                      </div>
-                      <div class="col m-2">
-                        <h4>Análises (reagentes)</h4>
-                        <mat-form-field class="full-width" appearance="fill">
-                          <mat-label>R$ Gasto Análises</mat-label>
-                          <input formControlName="analysis" matInput >
-                        </mat-form-field>
-                      </div>
-                      <div class="col m-2">
-                        <h4>Embalagens / Lacres</h4>
-                        <mat-form-field class="full-width" appearance="fill">
-                          <mat-label>R$ Gasto Embalagens / lacres</mat-label>
-                          <input formControlName="pack" matInput >
-                        </mat-form-field>
-                      </div>
-                      <div class="col m-2">
-                        <h4>Mão de obra</h4>
-                        <mat-form-field class="full-width" appearance="fill">
-                          <mat-label>R$ Gasto Mão de obra</mat-label>
-                          <input formControlName="labor" matInput >
-                        </mat-form-field>
-                      </div>
-                      <div class="col m-2">
-                        <h4>Transporte</h4>
-                        <mat-form-field class="full-width" appearance="fill">
-                          <mat-label>R$ Gasto Transporte</mat-label>
-                          <input formControlName="transport" matInput >
-                        </mat-form-field>
-                      </div>
-                      <div class="col m-2">
-                        <h4>Assistência Técnica</h4>
-                        <mat-form-field class="full-width" appearance="fill">
-                          <mat-label>R$ Gasto Assistência</mat-label>
-                          <input formControlName="assistance" matInput placeholder="" placeholder="ex: R$250">
-                        </mat-form-field>
-                      </div>
-                      <div class="col m-2">
-                        <h4>Taxas e Impostos</h4>
-                        <mat-form-field class="full-width" appearance="fill">
-                          <mat-label>R$ Gasto Taxas e Impostos</mat-label>
-                          <input formControlName="taxes" matInput >
-                        </mat-form-field>
-                      </div>
-                      <div class="col m-2">
-                        <h4>Outros</h4>
-                        <mat-form-field class="full-width" appearance="fill">
-                          <mat-label>R$ Gasto Outros</mat-label>
-                          <input formControlName="others" matInput >
-                        </mat-form-field>
-                      </div>
+                    <div class="col">
+                      <mat-form-field class="full-width" appearance="fill">
+                        <mat-label>Preço de venda por kg</mat-label>
+                        <input formControlName="price" matInput placeholder="ex: R$ 7,50">
+                        <mat-hint>*Preço da média por kg vendido</mat-hint>
+                      </mat-form-field>
                     </div>
-
                   </div>
-              
-              </div>
-              <div class="row">
-                <p class="text-end">*Nessa seção informe os custos e despesas com o viveiro.</p>
-              </div>
-
-            </div>
-          </mat-step>
-
-          <mat-step>
-            <ng-template matStepLabel>Fim de Estocagem</ng-template>
-            <div class="col m-3">
-              <div class="row">
-                <div class="col">
-                  <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>Despescagem</mat-label>
-                    <input matInput [matDatepicker]="picker2" formControlName="date_end">
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker>
-                    <mat-hint *ngIf="endDateSuggestion">Data Sugerida : {{endDateSuggestion}}</mat-hint>
-                  </mat-form-field>
-                </div>
-                <div class="col">
-                  <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>N.º de peixes despescados</mat-label>
-                    <input mask="separator.2" thousandSeparator="." matInput placeholder="ex: 1000und"
-                      formControlName="fish_end" (change)="limitFishEnd(); enableDisableRevenueControls()">
-                    <mat-hint *ngIf="controlFishEnd.errors">Quantidade maxima: {{this.form.value.fish_start}}</mat-hint>
-                  </mat-form-field>
-                </div>
-                <div class="col">
-                  <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>Peso Medio Final </mat-label>
-                    <input matInput placeholder="1500g" mask="0.000 || 00.000 " suffix="g" formControlName="weight_end">
-                    <mat-hint matSuffix>({{misc.converGramas(form.value.weight_end)}}kg)</mat-hint>
-                  </mat-form-field>
-                </div>
-                <div class="row">
-                  <p class="text-end">*Nessa seção informe os dados sobre a despescagem do viveiro.</p>
-                </div>
-              </div>
-            </div>
-          </mat-step>
-          <mat-step>
-            <ng-template matStepLabel>Receitas / Vendas</ng-template>
-            <div class="col m-3">
-              <div class="row">
-                <div class="col-md-12">
-                  <ng-container *ngFor="let item of controlRevenue.controls; let i = index">
-                    <ng-container [formGroupName]="i">
-                      <div class="row mt-3">
-                        <div class="col">
-                          <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Especificação</mat-label>
-                            <mat-select formControlName="description">
-                              <mat-option value="vivos">Venda de Peixes Vivos</mat-option>
-                              <mat-option value="abatidos">Venda de Peixes abatidos</mat-option>
-                              <mat-option value="outros">Outros</mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </div>
-    
-                      <div class="row">
-                        <div class="col">
-                          <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Qtd. de Peixes</mat-label>
-                            <input formControlName="qtd" matInput placeholder="ex: 900 und" (change)="limitQtd(i)"
-                              mask="separator.2" thousandSeparator=".">
-                            <mat-hint>*Quantidade max: {{limitQtd(i)}}</mat-hint>
-    
-                          </mat-form-field>
-                        </div>
-                        <div class="col">
-                          <mat-form-field class="full-width" appearance="fill">
-                            <mat-label>Preço de venda por kg</mat-label>
-                            <input formControlName="price" matInput placeholder="ex: R$ 7,50">
-                            <mat-hint>*Preço da média por kg vendido</mat-hint>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row mt-4" *ngIf="i != 0">
-                        <button (click)="deleteInputsRevenue(i)" type="button" mat-stroked-button color="warn"><i
-                            class="bi bi-trash-fill"></i> deletar </button>
-                      </div>
-                    </ng-container>
-                  </ng-container>
-    
-                  <div class="row mt-4">
-                    <button [disabled]="controlRevenue.length >= 3 || !this.form.value.fish_end"
-                      (click)="createInputsRevenue()" type="button" mat-stroked-button color="primary">+ Especificação
-                    </button>
+                  <div class="row mt-4" *ngIf="i != 0">
+                    <button (click)="deleteInputsRevenue(i)" type="button" mat-stroked-button color="warn"><i
+                        class="bi bi-trash-fill"></i> deletar </button>
                   </div>
-                </div>
-              </div>
-              <div class="row">
-                <p class="text-end">*Nessa seção informe as receitas obtidas sobre a produção do viveiro.</p>
+                </ng-container>
+              </ng-container>
+
+              <div class="row mt-4">
+                <button [disabled]="controlRevenue.length >= 3 || !this.form.value.fish_end"
+                  (click)="createInputsRevenue()" type="button" mat-stroked-button color="primary">+ Especificação
+                </button>
               </div>
             </div>
-          </mat-step>
-          <mat-step>
-            <ng-template matStepLabel>Acoes</ng-template>
-          </mat-step>
- 
-        </mat-stepper>
+          </div>
+          <div class="row">
+            <p class="text-end">*Nessa seção informe as receitas obtidas sobre a produção do viveiro.</p>
+          </div>
+        </div>
+      </mat-step>
 
-      </div>
-    </div>
+      <mat-step>
+        <ng-template matStepLabel>Acoes</ng-template>
+      </mat-step>
 
-    <ng-container *ngIf="isCreated">
-
-
-
-
-    </ng-container>
+    </mat-stepper>
 
 
-    <div class="row">
-      <div class="card round-xl justify-content-top shadow-lg p-3 mb-3 bg-white">
-        <button [disabled]="!form.valid" class="w-100 btn btn-lg btn-primary" type="submit">
+    <div class="row m-0 p-0">
+      <div class="col m-0 p-0">
+        <button (click)="createItem()" [disabled]="!form.valid" class="w-100 btn btn-lg btn-primary" type="button">
           Salvar Dados
         </button>
       </div>

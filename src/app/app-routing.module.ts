@@ -21,7 +21,7 @@ const routes: Routes = [
         component: DashboardComponent,
       },
       {
-        path: 'tanks',
+        path: '',
         loadChildren: () =>
           import('./views/tanks/tanks.module').then((m) => m.TanksModule),
       },
