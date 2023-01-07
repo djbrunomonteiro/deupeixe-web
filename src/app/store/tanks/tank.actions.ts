@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { Tank } from 'src/app/models/tank';
+import { ITank } from 'src/app/models/tank';
+
 
 export const TanksAll = createAction (
     '[TANKSALL] Get ALl Tanks'
@@ -7,7 +8,7 @@ export const TanksAll = createAction (
 
 export const SetTanksAll = createAction (
     '[SETTANKSALL] Set store',
-    props<{tanks: Tank[]}>()
+    props<{tanks: ITank[]}>()
 );
 
 export const SuccessGetTanks = createAction (
@@ -19,18 +20,18 @@ export const ErrorGetTanks = createAction (
 
 export const GetTank = createAction (
     '[GETTANK] Data base',
-    props<{tanks: Tank}>()
+    props<{tanks: ITank}>()
 );
 
 
 export const SetNewTank = createAction (
     '[SetNewTank] Data base',
-    props<{tank: Tank}>()
+    props<{tank: ITank}>()
 )
 
 export const SetNewTankStore = createAction (
     '[SetNewTank] Store',
-    props<{tank: Tank}>()
+    props<{tank: ITank}>()
 )
 
 
@@ -43,7 +44,7 @@ export const ErrorSetTank = createAction (
 
 export const TankUpdate = createAction (
     '[TANKUPDATE] Update of Tank',
-    props<{id: string, tank: Partial<Tank>}>()
+    props<{id: string, tank: Partial<ITank>}>()
 )
 
 export const TankDelete = createAction (

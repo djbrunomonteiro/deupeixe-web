@@ -1,12 +1,12 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
-import { Tank } from 'src/app/models/tank';
+import { ITank } from 'src/app/models/tank';
 import { TankActionTypes } from './tank.actions';
 
-export interface TankState extends EntityState<Tank> {
+export interface TankState extends EntityState<ITank> {
 }
 
-export const adapter: EntityAdapter<Tank> = createEntityAdapter<Tank>();
+export const adapter: EntityAdapter<ITank> = createEntityAdapter<ITank>();
 
 export const initialState: TankState = adapter.getInitialState({
 });

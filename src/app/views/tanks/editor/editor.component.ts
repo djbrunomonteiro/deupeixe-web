@@ -16,8 +16,8 @@ import {
 import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fromSelectors from '../../../store/app-selectors';
-import { Tank } from 'src/app/models/tank';
 import { AppState } from 'src/app/store/app';
+import { ITank } from 'src/app/models/tank';
 
 @Component({
   selector: 'app-editor',
@@ -114,8 +114,8 @@ export class EditorComponent implements OnInit, OnChanges {
   middleWeigth: number[] = [];
   middleWeigthF: number[] = [];
 
-  tanks$: Observable<Tank[] | undefined> = new Observable<Tank[]>();
-  tankRef$: Observable<Tank | undefined> = new Observable<Tank>();
+  tanks$: Observable<ITank[] | undefined> = new Observable<ITank[]>();
+  tankRef$: Observable<ITank | undefined> = new Observable<ITank>();
   idRef$: Observable<string | null> = new Observable<string>();
   idRef: string | undefined;
 
@@ -136,7 +136,7 @@ export class EditorComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.tanks$ = this.store.select(fromSelectors.selectAll);
+    // this.tanks$ = this.store.select(fromSelectors.selectAll);
     this.getItem();
     this.middleGenerator();
     console.log(`req`);
@@ -151,7 +151,7 @@ export class EditorComponent implements OnInit, OnChanges {
   getItem() {
     const id = this.routerAtiva.snapshot.paramMap.get('id');
     if (!id) {return;}
-    this.tankRef$ = this.store.select(fromSelectors.selectEntity(id));
+    // this.tankRef$ = this.store.select(fromSelectors.selectEntity(id));
     this.tankRef$.subscribe((res: any) => {
       if (!res) {return;}
       this.form.patchValue({
