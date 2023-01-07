@@ -2,7 +2,7 @@ import { AuthActionTypes } from './../../../store/auth/auth.actions';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserActionTypes } from 'src/app/store/user/user.actions';
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
   loading = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private authService: AuthService,
     private router: Router,
     private store: Store,

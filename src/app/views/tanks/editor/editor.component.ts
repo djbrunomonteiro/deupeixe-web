@@ -7,11 +7,11 @@ import { Store } from '@ngrx/store';
 import { MiscService } from './../../../services/misc.service';
 import { Observable } from 'rxjs';
 import {
-  FormArray,
-  FormBuilder,
+  UntypedFormArray,
+  UntypedFormBuilder,
   Validators,
-  FormGroup,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormControl,
 } from '@angular/forms';
 import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -67,9 +67,9 @@ export class EditorComponent implements OnInit, OnChanges {
     }),
   });
 
-  controlRevenue = this.form.get('revenue') as FormArray;
-  controlFishStart = this.form.get('fish_start') as FormControl;
-  controlFishEnd = this.form.get('fish_end') as FormControl;
+  controlRevenue = this.form.get('revenue') as UntypedFormArray;
+  controlFishStart = this.form.get('fish_start') as UntypedFormControl;
+  controlFishEnd = this.form.get('fish_end') as UntypedFormControl;
   crIndex = 0;
 
   isCreated = false;
@@ -79,9 +79,9 @@ export class EditorComponent implements OnInit, OnChanges {
   cyclePrices: number[] = [];
   cycleMonth: number[] = [];
 
-  foodControl = this.form.get('food') as FormGroup;
-  monthControl = this.foodControl.get('month') as FormArray;
-  pricesControl = this.foodControl.get('prices') as FormArray;
+  foodControl = this.form.get('food') as UntypedFormGroup;
+  monthControl = this.foodControl.get('month') as UntypedFormArray;
+  pricesControl = this.foodControl.get('prices') as UntypedFormArray;
 
   species = [
     'tilápia',
@@ -120,7 +120,7 @@ export class EditorComponent implements OnInit, OnChanges {
   idRef: string | undefined;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private routerAtiva: ActivatedRoute,
     public misc: MiscService,
     private store: Store<AppState>,
